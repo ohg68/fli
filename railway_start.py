@@ -179,7 +179,10 @@ function bL(o,d,date,ret){
   var sk='https://www.skyscanner.com/transport/flights/'+o.toLowerCase()+'/'+d.toLowerCase()+'/'+date.replace(/-/g,'');
   if(ret)sk+='/'+ret.replace(/-/g,'');
   var ky='https://www.kayak.com/flights/'+o+'-'+d+'/'+date;if(ret)ky+='/'+ret;
-  return '<div class="links"><a href="'+gf+'" target="_blank">Google</a><a href="'+sk+'" target="_blank">Skyscanner</a><a href="'+ky+'" target="_blank">Kayak</a></div>';
+  var itaJson={type:ret?"round-trip":"one-way",slices:[{origin:[o],dest:[d],dates:{searchDateType:"specific",departureDate:date}}],options:{cabin:"COACH",stops:"-1",extraStops:"1",allowAirportChanges:"true",showOnlyAvailable:"true"},pax:{adults:"1"}};
+  if(ret){itaJson.slices[0].dates.returnDate=ret}
+  var ita='https://matrix.itasoftware.com/flights?search='+btoa(JSON.stringify(itaJson));
+  return '<div class="links"><a href="'+gf+'" target="_blank">Google</a><a href="'+sk+'" target="_blank">Skyscanner</a><a href="'+ky+'" target="_blank">Kayak</a><a href="'+ita+'" target="_blank">ITA Matrix</a></div>';
 }
 
 var today=new Date();var m1=new Date(today);m1.setDate(today.getDate()+30);var m2=new Date(today);m2.setDate(today.getDate()+60);
